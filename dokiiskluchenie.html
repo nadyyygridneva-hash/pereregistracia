@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Интерактивная таблица-гармошка: документы для исключения ОПО из реестра</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f0f4f8;
+            font-family: system-ui, 'Segoe UI', 'Roboto', 'Noto Sans', sans-serif;
+            line-height: 1.5;
+            padding: 2rem 1rem;
+            color: #1a2c3e;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .info-header {
+            background: linear-gradient(135deg, #0b3b5f 0%, #1b4e6e 100%);
+            color: white;
+            padding: 1.8rem 2rem;
+        }
+
+        .info-header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .info-header h1:before {
+            content: "📋";
+            font-size: 1.8rem;
+            font-weight: normal;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #ffcd6b;
+            color: #1a3b4e;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.2rem 0.7rem;
+            margin-left: 12px;
+            vertical-align: middle;
+        }
+
+        .accordion {
+            padding: 0.5rem 1.5rem 1.8rem 1.5rem;
+        }
+
+        .accordion-item {
+            background: #ffffff;
+            border-radius: 20px;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+            transition: box-shadow 0.2s;
+            border: 1px solid #e2edf2;
+        }
+
+        .accordion-item:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            border-color: #cbdde6;
+        }
+
+        .accordion-header {
+            width: 100%;
+            background: #ffffff;
+            border: none;
+            padding: 1.2rem 1.5rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            border-radius: 20px;
+            transition: background 0.2s, border-radius 0.2s;
+            font-family: inherit;
+            color: #0f3b4f;
+        }
+
+        .accordion-header:hover {
+            background: #f9fbfd;
+        }
+
+        .accordion-header .title-icon {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .title-icon span:first-child {
+            font-size: 1.5rem;
+        }
+
+        .indicator {
+            font-size: 1.3rem;
+            transition: transform 0.2s ease;
+            font-weight: 400;
+            color: #2c7da0;
+        }
+
+        .accordion-item.active .indicator {
+            transform: rotate(180deg);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            background: #fefefe;
+            border-radius: 0 0 20px 20px;
+            border-top: 0px solid transparent;
+        }
+
+        .accordion-item.active .accordion-content {
+            max-height: 1200px;
+            border-top: 1px solid #e9f0f4;
+        }
+
+        .docs-list {
+            padding: 1.2rem 1.8rem 1.5rem 2.2rem;
+            margin: 0;
+            list-style-type: none;
+        }
+
+        .docs-list li {
+            margin-bottom: 0.85rem;
+            position: relative;
+            padding-left: 1.6rem;
+            font-size: 0.95rem;
+            color: #1e2f3c;
+            line-height: 1.45;
+        }
+
+        .docs-list li:last-child {
+            margin-bottom: 0;
+        }
+
+        .docs-list li::before {
+            content: "▹";
+            position: absolute;
+            left: 0;
+            color: #2c7da0;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .subnote {
+            font-size: 0.85rem;
+            color: #5b6f7c;
+            background: #f1f7fa;
+            margin-top: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 14px;
+            display: inline-block;
+            width: auto;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-bottom: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .ctrl-btn {
+            background: #eef3f7;
+            border: none;
+            padding: 0.45rem 1.1rem;
+            border-radius: 60px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #1b5a77;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .ctrl-btn:hover {
+            background: #dfe9ef;
+            color: #0c3f55;
+        }
+
+        @media (max-width: 680px) {
+            .info-header {
+                padding: 1.3rem 1.2rem;
+            }
+            .info-header h1 {
+                font-size: 1.4rem;
+            }
+            .accordion {
+                padding: 0.5rem 1rem 1.5rem 1rem;
+            }
+            .accordion-header {
+                padding: 1rem 1.2rem;
+                font-size: 1rem;
+            }
+            .docs-list {
+                padding: 1rem 1.2rem 1.2rem 1.6rem;
+            }
+            .docs-list li {
+                font-size: 0.88rem;
+            }
+            .title-icon span:first-child {
+                font-size: 1.3rem;
+            }
+        }
+
+        .accordion-header:focus-visible {
+            outline: 2px solid #2c7da0;
+            outline-offset: -2px;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="info-header">
+        <h1>
+            Документы для заявления об исключении ОПО из реестра
+            <span class="badge">интерактивный справочник</span>
+        </h1>
+        <!-- Весь пояснительный текст удалён по запросу -->
+    </div>
+
+    <div class="accordion">
+        <div class="action-buttons">
+            <button class="ctrl-btn" id="expandAllBtn">📂 Развернуть все</button>
+            <button class="ctrl-btn" id="collapseAllBtn">📁 Свернуть все</button>
+        </div>
+
+        <!-- Блок 1: Ликвидация ОПО (один эмодзи 🏭) -->
+        <div class="accordion-item" data-accordion>
+            <button class="accordion-header" aria-expanded="false">
+                <div class="title-icon">
+                    <span>🏭</span>
+                    <span>Ликвидация ОПО</span>
+                </div>
+                <span class="indicator">▼</span>
+            </button>
+            <div class="accordion-content">
+                <ul class="docs-list">
+                    <li>Сведения о документации на ликвидацию ОПО (наименование документации, разработчики).</li>
+                    <li>Реквизиты регистрационного номера заключения экспертизы промышленной безопасности (ЭПБ) на документацию по ликвидации ОПО.</li>
+                    <li>Копии документов, подтверждающих утилизацию или передачу опасных веществ.</li>
+                    <li>Копии документов, подтверждающих снос (демонтаж) технических устройств, зданий и сооружений с признаками опасности на ОПО.</li>
+                    <li>Копия акта ликвидации объекта.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Блок 2: Консервация более чем на год (один эмодзи ⏸️) -->
+        <div class="accordion-item" data-accordion>
+            <button class="accordion-header" aria-expanded="false">
+                <div class="title-icon">
+                    <span>⏸️</span>
+                    <span>Консервация более чем на год</span>
+                </div>
+                <span class="indicator">▼</span>
+            </button>
+            <div class="accordion-content">
+                <ul class="docs-list">
+                    <li>Сведения о документации на консервацию ОПО (наименование документации, разработчики).</li>
+                    <li>Реквизиты регистрационного номера заключения ЭПБ на документацию о консервации ОПО.</li>
+                    <li>Копия акта о консервации объекта.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Блок 3: Утрата признаков опасности (один эмодзи 🛡️) -->
+        <div class="accordion-item" data-accordion>
+            <button class="accordion-header" aria-expanded="false">
+                <div class="title-icon">
+                    <span>🛡️</span>
+                    <span>Утрата признаков опасности</span>
+                </div>
+                <span class="indicator">▼</span>
+            </button>
+            <div class="accordion-content">
+                <ul class="docs-list">
+                    <li>Сведения из проектной документации на ОПО, включая копию раздела «Технологические решения» (если раздел присутствует).</li>
+                    <li>Иные документы, подтверждающие утрату признаков опасности (когда проектная документация разработана до 2008 года, отсутствует либо в ней нет раздела «Технологические решения»). 
+                        <div class="subnote">📌 Перечень таких документов содержится в п. 14 Правил регистрации ОПО в госреестре № 1363.</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Блок 4: Изменение критериев отнесения к категории ОПО или требований к идентификации (один эмодзи ⚖️) -->
+        <div class="accordion-item" data-accordion>
+            <button class="accordion-header" aria-expanded="false">
+                <div class="title-icon">
+                    <span>⚖️</span>
+                    <span>Изменение критериев отнесения к категории ОПО или требований к идентификации</span>
+                </div>
+                <span class="indicator">▼</span>
+            </button>
+            <div class="accordion-content">
+                <ul class="docs-list">
+                    <li>Пояснительная записка с указанием изменившихся критериев или требований.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Блок с нормативной базой полностью удалён по запросу -->
+    </div>
+</div>
+
+<script>
+    (function() {
+        const accordionItems = document.querySelectorAll('[data-accordion]');
+        
+        function collapseAll() {
+            accordionItems.forEach(item => {
+                const headerBtn = item.querySelector('.accordion-header');
+                item.classList.remove('active');
+                if (headerBtn) headerBtn.setAttribute('aria-expanded', 'false');
+            });
+        }
+        
+        function expandAll() {
+            accordionItems.forEach(item => {
+                const headerBtn = item.querySelector('.accordion-header');
+                item.classList.add('active');
+                if (headerBtn) headerBtn.setAttribute('aria-expanded', 'true');
+            });
+        }
+        
+        function toggleAccordion(item) {
+            const headerBtn = item.querySelector('.accordion-header');
+            const isActive = item.classList.contains('active');
+            if (!isActive) {
+                item.classList.add('active');
+                if (headerBtn) headerBtn.setAttribute('aria-expanded', 'true');
+            } else {
+                item.classList.remove('active');
+                if (headerBtn) headerBtn.setAttribute('aria-expanded', 'false');
+            }
+        }
+        
+        accordionItems.forEach(item => {
+            const header = item.querySelector('.accordion-header');
+            if (header) {
+                header.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    toggleAccordion(item);
+                });
+            }
+        });
+        
+        const expandBtn = document.getElementById('expandAllBtn');
+        const collapseBtn = document.getElementById('collapseAllBtn');
+        
+        if (expandBtn) {
+            expandBtn.addEventListener('click', () => expandAll());
+        }
+        if (collapseBtn) {
+            collapseBtn.addEventListener('click', () => collapseAll());
+        }
+        
+        // начальное состояние: все закрыты
+        accordionItems.forEach(item => {
+            const btn = item.querySelector('.accordion-header');
+            if (btn && !item.classList.contains('active')) {
+                btn.setAttribute('aria-expanded', 'false');
+            }
+        });
+    })();
+</script>
+</body>
+</html>
