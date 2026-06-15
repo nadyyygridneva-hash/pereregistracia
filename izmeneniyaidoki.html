@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Собери документы для ОПО | Интерактив</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background: #eef2f7;
+      margin: 0;
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    /* главный контейнер */
+    .interactive {
+      max-width: 1400px;
+      margin: 0 auto;
+      background: #ffffffdd;
+      backdrop-filter: blur(2px);
+      border-radius: 48px;
+      box-shadow: 0 20px 35px -12px rgba(0,0,0,0.2);
+      padding: 24px 28px 32px;
+      transition: all 0.2s;
+    }
+
+    h1 {
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: #1a4c6e;
+      text-align: center;
+      margin: 0 0 6px 0;
+      letter-spacing: -0.3px;
+    }
+
+    .subhead {
+      text-align: center;
+      color: #2c6a8c;
+      font-weight: 500;
+      margin-bottom: 32px;
+      border-bottom: 2px solid #cbdde9;
+      display: inline-block;
+      width: auto;
+      margin-left: auto;
+      margin-right: auto;
+      padding-bottom: 8px;
+    }
+
+    /* две колонки */
+    .game-layout {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      margin-top: 15px;
+    }
+
+    /* левая колонка — ситуации (фиксированные) */
+    .situations-col {
+      flex: 1.2;
+      min-width: 280px;
+      background: #fefaf2;
+      border-radius: 36px;
+      padding: 20px 20px;
+      box-shadow: 0 12px 20px -12px rgba(0, 0, 0, 0.2);
+    }
+
+    .situations-col h2 {
+      background: #1f5e7e;
+      color: white;
+      margin: -20px -20px 20px -20px;
+      padding: 14px 0;
+      text-align: center;
+      border-radius: 36px 36px 28px 28px;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    .situation-card {
+      background: #ffffff;
+      border-radius: 28px;
+      margin-bottom: 24px;
+      padding: 12px 16px 16px;
+      border: 1px solid #e2dccf;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.03);
+      transition: 0.1s;
+    }
+
+    .situation-title {
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: #1c4e6e;
+      background: #ecf3f9;
+      display: inline-block;
+      padding: 5px 18px;
+      border-radius: 40px;
+      margin-bottom: 14px;
+      border-left: 5px solid #f4b942;
+    }
+
+    .drop-zone {
+      background: #f8f5ed;
+      border: 2px dashed #9bb7ce;
+      border-radius: 24px;
+      min-height: 85px;
+      padding: 12px;
+      transition: 0.1s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .drop-zone.drag-over {
+      background: #e5f0fa;
+      border-color: #f4b942;
+      border-style: solid;
+      transform: scale(0.99);
+    }
+
+    .dropped-doc {
+      background: #fff1df;
+      border-radius: 20px;
+      padding: 12px 14px;
+      width: 100%;
+      text-align: center;
+      font-weight: 600;
+      color: #1f4d6b;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+      border-left: 6px solid #f4b942;
+      cursor: grab;
+      transition: 0.05s linear;
+    }
+
+    .dropped-doc:active {
+      cursor: grabbing;
+    }
+
+    .empty-placeholder {
+      color: #7f9cbb;
+      font-style: italic;
+      font-weight: 500;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* правая колонка — перетаскиваемые документы */
+    .docs-col {
+      flex: 0.9;
+      min-width: 270px;
+      background: #eef3fc;
+      border-radius: 36px;
+      padding: 20px 20px;
+      box-shadow: 0 12px 20px -12px rgba(0, 0, 0, 0.2);
+    }
+
+    .docs-col h2 {
+      background: #4a7c5c;
+      color: white;
+      margin: -20px -20px 20px -20px;
+      padding: 14px 0;
+      text-align: center;
+      border-radius: 36px 36px 28px 28px;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    .documents-pool {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .doc-card {
+      background: white;
+      padding: 16px 14px;
+      border-radius: 28px;
+      cursor: grab;
+      font-weight: 600;
+      color: #1f4d6b;
+      box-shadow: 0 6px 14px -6px rgba(0,0,0,0.15);
+      border: 1px solid #d4e2f0;
+      transition: 0.1s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .doc-card:active {
+      cursor: grabbing;
+    }
+
+    .doc-card.dragging {
+      opacity: 0.4;
+    }
+
+    .doc-card.hidden-doc {
+      display: none;
+    }
+
+    .doc-icon {
+      font-size: 1.6rem;
+    }
+
+    /* кнопки */
+    .button-bar {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin: 36px 0 20px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: none;
+      font-weight: bold;
+      font-size: 1rem;
+      padding: 12px 28px;
+      border-radius: 60px;
+      cursor: pointer;
+      transition: 0.2s;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      background: white;
+    }
+
+    .btn-check {
+      background: #2c7a4d;
+      color: white;
+    }
+    .btn-check:hover {
+      background: #1f5e3a;
+      transform: scale(1.02);
+    }
+    .btn-reset {
+      background: #f4b942;
+      color: #2d3e50;
+    }
+    .btn-reset:hover {
+      background: #ffcd6e;
+      transform: scale(1.02);
+    }
+
+    .message-area {
+      text-align: center;
+      font-weight: 600;
+      font-size: 1rem;
+      min-height: 70px;
+      margin-top: 10px;
+    }
+
+    .feedback-good {
+      background: #c8e6d9;
+      color: #115c3c;
+      padding: 8px 24px;
+      border-radius: 60px;
+      display: inline-block;
+    }
+
+    .feedback-bad {
+      background: #ffe0cc;
+      color: #b34e2c;
+      padding: 8px 24px;
+      border-radius: 60px;
+      display: inline-block;
+    }
+
+    .highlight-green {
+      background-color: #cbefdb;
+      border-left: 6px solid #1e8f4e;
+      transition: 0.1s;
+    }
+
+    .highlight-red {
+      background-color: #ffe1d6;
+      border-left: 6px solid #c95a2e;
+    }
+
+    @media (max-width: 780px) {
+      .interactive {
+        padding: 16px;
+      }
+      .situation-title, .doc-card {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="interactive">
+  <h1>📋 Соберите документы для внесения изменений в сведения</h1>
+  <div style="text-align: center;"><span class="subhead">Перетащите документ к соответствующей ситуации</span></div>
+
+  <div class="game-layout">
+    <!-- ЛЕВАЯ КОЛОНКА: фиксированные ситуации с зонами для документов -->
+    <div class="situations-col">
+      <h2>📌 Ситуации (изменения на ОПО)</h2>
+      
+      <div class="situation-card" data-situation-id="situation-furnace">
+        <div class="situation-title">🏭 Появилась новая печь для плавки металлов</div>
+        <div class="drop-zone" data-expected-doc="passport-tu" id="zone-furnace">
+          <div class="empty-placeholder">⬅️ Сюда перетащите нужный документ</div>
+        </div>
+      </div>
+
+      <div class="situation-card" data-situation-id="situation-gas">
+        <div class="situation-title">⚠️ Начали выполнять газоопасные работы</div>
+        <div class="drop-zone" data-expected-doc="process-list" id="zone-gas">
+          <div class="empty-placeholder">⬅️ Сюда перетащите нужный документ</div>
+        </div>
+      </div>
+
+      <div class="situation-card" data-situation-id="situation-address">
+        <div class="situation-title">📍 Изменился адрес и кадастровый номер ОПО</div>
+        <div class="drop-zone" data-expected-doc="egrn-statement" id="zone-address">
+          <div class="empty-placeholder">⬅️ Сюда перетащите нужный документ</div>
+        </div>
+      </div>
+
+      <div class="situation-card" data-situation-id="situation-name">
+        <div class="situation-title">🏷️ Изменилось типовое наименование ОПО</div>
+        <div class="drop-zone" data-expected-doc="new-info" id="zone-name">
+          <div class="empty-placeholder">⬅️ Сюда перетащите нужный документ</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ПРАВАЯ КОЛОНКА: перетаскиваемые документы -->
+    <div class="docs-col">
+      <h2>📄 Доступные документы (перетащите)</h2>
+      <div class="documents-pool" id="docsPool">
+        <div class="doc-card" draggable="true" data-doc-id="passport-tu">
+          <span class="doc-icon">📑</span> Паспорт и сертификат ТУ
+        </div>
+        <div class="doc-card" draggable="true" data-doc-id="process-list">
+          <span class="doc-icon">📋</span> Перечень процессов, которые будут выполняться на ОПО
+        </div>
+        <div class="doc-card" draggable="true" data-doc-id="egrn-statement">
+          <span class="doc-icon">🏢</span> Выписка из ЕГРН
+        </div>
+        <div class="doc-card" draggable="true" data-doc-id="new-info">
+          <span class="doc-icon">📝</span> Новые сведения, характеризующие ОПО
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="button-bar">
+    <button class="btn btn-check" id="checkBtn">✅ Проверить результат</button>
+    <button class="btn btn-reset" id="resetBtn">🔄 Сбросить всё</button>
+  </div>
+  <div class="message-area" id="messageArea"></div>
+</div>
+
+<script>
+  // Соответствие "ожидаемый документ" для каждой зоны (по data-expected-doc)
+  // Получаем элементы
+  const dropZones = document.querySelectorAll('.drop-zone');
+  const docCards = document.querySelectorAll('.doc-card');
+  const docsPool = document.getElementById('docsPool');
+  const checkBtn = document.getElementById('checkBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const messageDiv = document.getElementById('messageArea');
+  
+  // Служебные функции
+  
+  function setMessage(text, isError = false, isTemporary = true) {
+    messageDiv.innerHTML = `<div class="${isError ? 'feedback-bad' : 'feedback-good'}">${text}</div>`;
+    if (isTemporary) {
+      setTimeout(() => {
+        if (messageDiv.innerHTML.includes(text)) {
+          if (messageDiv.innerText === text) messageDiv.innerHTML = '';
+        }
+      }, 2800);
+    }
+  }
+  
+  function clearHighlights() {
+    dropZones.forEach(zone => {
+      zone.classList.remove('highlight-green', 'highlight-red');
+    });
+  }
+  
+  function findZoneWithDoc(docId) {
+    let foundZone = null;
+    dropZones.forEach(zone => {
+      const droppedDiv = zone.querySelector('.dropped-doc');
+      if (droppedDiv && droppedDiv.getAttribute('data-doc-id') === docId) {
+        foundZone = zone;
+      }
+    });
+    return foundZone;
+  }
+  
+  function clearZoneContent(zone) {
+    const dropped = zone.querySelector('.dropped-doc');
+    if (dropped) dropped.remove();
+    if (!zone.querySelector('.dropped-doc') && !zone.querySelector('.empty-placeholder')) {
+      zone.innerHTML = `<div class="empty-placeholder">⬅️ Сюда перетащите нужный документ</div>`;
+    } else if (zone.querySelector('.empty-placeholder') === null && !zone.querySelector('.dropped-doc')) {
+      zone.innerHTML = `<div class="empty-placeholder">⬅️ Сюда перетащите нужный документ</div>`;
+    }
+  }
+  
+  function restoreDocToPool(docId, docFullText, iconHtml = null) {
+    const existingCard = Array.from(docCards).find(card => card.getAttribute('data-doc-id') === docId);
+    if (existingCard && existingCard.classList.contains('hidden-doc')) {
+      existingCard.classList.remove('hidden-doc');
+      existingCard.setAttribute('draggable', 'true');
+      existingCard.style.display = '';
+      return existingCard;
+    } else if (!existingCard) {
+      const newCard = document.createElement('div');
+      newCard.className = 'doc-card';
+      newCard.setAttribute('draggable', 'true');
+      newCard.setAttribute('data-doc-id', docId);
+      newCard.innerHTML = `<span class="doc-icon">${iconHtml || '📄'}</span> ${docFullText}`;
+      docsPool.appendChild(newCard);
+      attachDragEvents(newCard);
+      return newCard;
+    }
+    return null;
+  }
+  
+  function attachDragEvents(card) {
+    card.addEventListener('dragstart', handleDragStart);
+    card.addEventListener('dragend', handleDragEnd);
+  }
+  
+  let draggedItem = null;
+  let draggedDocId = null;
+  
+  function handleDragStart(e) {
+    const card = e.target.closest('.doc-card');
+    if (!card) return;
+    if (card.classList.contains('hidden-doc')) {
+      e.preventDefault();
+      return false;
+    }
+    draggedItem = card;
+    draggedDocId = card.getAttribute('data-doc-id');
+    e.dataTransfer.setData('text/plain', draggedDocId);
+    e.dataTransfer.effectAllowed = 'move';
+    card.classList.add('dragging');
+  }
+  
+  function handleDragEnd(e) {
+    if (draggedItem) draggedItem.classList.remove('dragging');
+    draggedItem = null;
+    draggedDocId = null;
+    dropZones.forEach(zone => zone.classList.remove('drag-over'));
+  }
+  
+  function setupDropZones() {
+    dropZones.forEach(zone => {
+      zone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        zone.classList.add('drag-over');
+      });
+      zone.addEventListener('dragleave', () => {
+        zone.classList.remove('drag-over');
+      });
+      
+      zone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        zone.classList.remove('drag-over');
+        const sourceDocId = e.dataTransfer.getData('text/plain');
+        if (!sourceDocId) return;
+        
+        let sourceCard = Array.from(docCards).find(card => card.getAttribute('data-doc-id') === sourceDocId && !card.classList.contains('hidden-doc'));
+        let sourceZone = null;
+        if (!sourceCard) {
+          sourceZone = findZoneWithDoc(sourceDocId);
+          if (sourceZone) {
+            const droppedDiv = sourceZone.querySelector('.dropped-doc');
+            if (droppedDiv) sourceCard = droppedDiv;
+          }
+        }
+        
+        if (!sourceCard && !sourceZone) {
+          setMessage("Ошибка: документ не найден", true, true);
+          return;
+        }
+        
+        const targetZone = zone;
+        const existingInTarget = targetZone.querySelector('.dropped-doc');
+        const isFromPool = (sourceCard && sourceCard.classList && sourceCard.classList.contains('doc-card') && !sourceCard.classList.contains('dropped-doc'));
+        
+        if (sourceZone === targetZone) return;
+        
+        if (existingInTarget) {
+          const oldDocId = existingInTarget.getAttribute('data-doc-id');
+          const oldDocText = existingInTarget.innerText.trim();
+          restoreDocToPool(oldDocId, oldDocText);
+          existingInTarget.remove();
+        }
+        
+        let docIdToPlace = sourceDocId;
+        let docTextToPlace = '';
+        let iconHtml = '';
+        
+        if (sourceCard && !sourceZone) {
+          docTextToPlace = sourceCard.innerText.trim();
+          const iconSpan = sourceCard.querySelector('.doc-icon');
+          iconHtml = iconSpan ? iconSpan.innerHTML : '📄';
+          sourceCard.classList.add('hidden-doc');
+          sourceCard.setAttribute('draggable', 'false');
+          sourceCard.style.display = 'none';
+        } else if (sourceZone && sourceCard) {
+          docTextToPlace = sourceCard.innerText.trim();
+          const iconFrom = sourceCard.querySelector('.doc-icon') ? sourceCard.querySelector('.doc-icon').innerHTML : '📄';
+          iconHtml = iconFrom;
+          clearZoneContent(sourceZone);
+        } else if (sourceCard && sourceCard.classList.contains('dropped-doc')) {
+          docTextToPlace = sourceCard.innerText.trim();
+          const iconFrom = sourceCard.querySelector('.doc-icon') ? sourceCard.querySelector('.doc-icon').innerHTML : '📄';
+          iconHtml = iconFrom;
+          const parentZone = sourceCard.closest('.drop-zone');
+          if (parentZone) clearZoneContent(parentZone);
+        } else {
+          return;
+        }
+        
+        const droppedElement = document.createElement('div');
+        droppedElement.className = 'dropped-doc';
+        droppedElement.setAttribute('data-doc-id', docIdToPlace);
+        droppedElement.setAttribute('draggable', 'true');
+        droppedElement.innerHTML = `<span class="doc-icon">${iconHtml}</span> <strong>${docTextToPlace}</strong>`;
+        droppedElement.addEventListener('dragstart', function(e) {
+          e.dataTransfer.setData('text/plain', docIdToPlace);
+          e.dataTransfer.effectAllowed = 'move';
+          draggedItem = droppedElement;
+          draggedDocId = docIdToPlace;
+          droppedElement.classList.add('dragging');
+        });
+        droppedElement.addEventListener('dragend', function(e) {
+          droppedElement.classList.remove('dragging');
+          draggedItem = null;
+        });
+        
+        clearZoneContent(targetZone);
+        targetZone.appendChild(droppedElement);
+        setMessage(`📎 Документ перемещён`, false, true);
+      });
+    });
+  }
+  
+  function initDragSources() {
+    docCards.forEach(card => {
+      card.addEventListener('dragstart', handleDragStart);
+      card.addEventListener('dragend', handleDragEnd);
+    });
+  }
+  
+  function checkResult() {
+    clearHighlights();
+    let correctCount = 0;
+    let total = dropZones.length;
+    
+    dropZones.forEach(zone => {
+      const expected = zone.getAttribute('data-expected-doc');
+      const droppedDiv = zone.querySelector('.dropped-doc');
+      let currentDocId = null;
+      if (droppedDiv) {
+        currentDocId = droppedDiv.getAttribute('data-doc-id');
+      }
+      const isCorrect = (currentDocId === expected);
+      if (isCorrect) {
+        correctCount++;
+        zone.classList.add('highlight-green');
+      } else {
+        if (currentDocId !== null) {
+          zone.classList.add('highlight-red');
+        } else {
+          zone.style.backgroundColor = '#fff1e0';
+          setTimeout(() => zone.style.backgroundColor = '', 1500);
+        }
+      }
+    });
+    
+    if (correctCount === total) {
+      setMessage(`🎉 Отлично! Все 4 документа подобраны верно! 🎉`, false, false);
+    } else {
+      setMessage(`📌 Правильно: ${correctCount} из ${total}. Неверно привязанные или пустые зоны подсвечены красным. Попробуйте перетащить документы заново.`, true, false);
+    }
+    setTimeout(() => {
+      dropZones.forEach(zone => {
+        zone.classList.remove('highlight-green', 'highlight-red');
+        zone.style.backgroundColor = '';
+      });
+    }, 3200);
+  }
+  
+  function resetGame() {
+    dropZones.forEach(zone => {
+      clearZoneContent(zone);
+      zone.classList.remove('highlight-green', 'highlight-red');
+      zone.style.backgroundColor = '';
+    });
+    
+    docCards.forEach(card => {
+      card.classList.remove('hidden-doc');
+      card.setAttribute('draggable', 'true');
+      card.style.display = '';
+    });
+    
+    setMessage('🔄 Игра сброшена. Распределите документы заново.', false, true);
+    clearHighlights();
+  }
+  
+  docsPool.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  });
+  
+  docsPool.addEventListener('drop', (e) => {
+    e.preventDefault();
+    const docId = e.dataTransfer.getData('text/plain');
+    if (!docId) return;
+    const sourceZone = findZoneWithDoc(docId);
+    if (sourceZone) {
+      const droppedDiv = sourceZone.querySelector('.dropped-doc');
+      if (droppedDiv) {
+        const docText = droppedDiv.innerText.trim();
+        let iconHtml = '📄';
+        const iconSpan = droppedDiv.querySelector('.doc-icon');
+        if (iconSpan) iconHtml = iconSpan.innerHTML;
+        restoreDocToPool(docId, docText, iconHtml);
+        clearZoneContent(sourceZone);
+        setMessage(`↩️ Документ возвращён в список`, false, true);
+      }
+    } else {
+      setMessage(`Документ уже в списке`, true, true);
+    }
+  });
+  
+  function init() {
+    initDragSources();
+    setupDropZones();
+    checkBtn.addEventListener('click', checkResult);
+    resetBtn.addEventListener('click', resetGame);
+  }
+  
+  init();
+</script>
+</body>
+</html>
