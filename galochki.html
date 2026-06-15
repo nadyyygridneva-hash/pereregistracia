@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Тренажёр: внесение изменений в реестр ОПО</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #eef2f5;
+            margin: 0;
+            padding: 24px 16px;
+            color: #1a2c3e;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            padding: 24px 28px 32px;
+            transition: all 0.2s;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 0.25rem;
+            color: #0b3b5f;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        h1 small {
+            font-size: 0.8rem;
+            font-weight: normal;
+            background: #e9ecef;
+            padding: 4px 12px;
+            border-radius: 40px;
+            color: #2c5a7a;
+        }
+
+        .subhead {
+            color: #4a627a;
+            border-left: 4px solid #2c7da0;
+            padding-left: 16px;
+            margin: 16px 0 24px 0;
+            font-weight: 450;
+        }
+
+        .situation-card {
+            background: #f8fafd;
+            border-radius: 24px;
+            padding: 20px 24px;
+            margin: 20px 0 28px 0;
+            border: 1px solid #dee4e9;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        }
+
+        .situation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+            gap: 12px;
+        }
+
+        .badge {
+            background: #1e5a7d;
+            color: white;
+            padding: 4px 14px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .situation-text {
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #1f3b4c;
+            background: white;
+            padding: 16px 20px;
+            border-radius: 20px;
+            border-left: 4px solid #ffb74d;
+            margin-top: 8px;
+        }
+
+        .checklist {
+            margin: 28px 0 20px;
+            background: #ffffff;
+            border-radius: 20px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+        }
+
+        .checklist-title {
+            background: #f1f5f9;
+            padding: 12px 20px;
+            font-weight: 700;
+            font-size: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            color: #0f3b5c;
+        }
+
+        .check-item {
+            padding: 12px 20px;
+            border-bottom: 1px solid #edf2f7;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            transition: background 0.1s;
+        }
+
+        .check-item:hover {
+            background: #fefce8;
+        }
+
+        .check-item:last-child {
+            border-bottom: none;
+        }
+
+        .check-item label {
+            flex: 1;
+            font-size: 0.94rem;
+            line-height: 1.45;
+            color: #1e2f3f;
+            cursor: pointer;
+            font-weight: 450;
+        }
+
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            cursor: pointer;
+            accent-color: #2c7da0;
+        }
+
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin: 24px 0 16px;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        button {
+            background: white;
+            border: 1px solid #bdd3e4;
+            padding: 10px 20px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.15s;
+            color: #1e4663;
+        }
+
+        button.primary {
+            background: #1e5a7d;
+            border-color: #1e5a7d;
+            color: white;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        button.primary:hover:not(:disabled) {
+            background: #0f4462;
+            transform: translateY(-1px);
+        }
+
+        button.primary:disabled {
+            background: #9bb7cc;
+            border-color: #9bb7cc;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        button.secondary {
+            background: #f0f4f9;
+            border-color: #cbdde9;
+        }
+
+        button.secondary:hover {
+            background: #e6edf4;
+            border-color: #a6c0d2;
+        }
+
+        .message {
+            margin-top: 20px;
+            padding: 14px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            background: #f9f5eb;
+            border-left: 5px solid #ffb74d;
+        }
+
+        .message.success {
+            background: #e3f5ec;
+            border-left-color: #2e7d64;
+            color: #1a5a48;
+        }
+
+        .message.error {
+            background: #ffe9e6;
+            border-left-color: #c73e2d;
+            color: #a13021;
+        }
+
+        hr {
+            margin: 20px 0 0;
+            border: none;
+            border-top: 1px solid #e2edf2;
+        }
+
+        .footer-note {
+            font-size: 0.75rem;
+            text-align: center;
+            color: #6f8eaa;
+            margin-top: 24px;
+        }
+
+        @media (max-width: 680px) {
+            .container {
+                padding: 16px;
+            }
+            .check-item label {
+                font-size: 0.85rem;
+            }
+            .situation-text {
+                font-size: 0.9rem;
+                padding: 12px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>
+        📋 Внесение изменений в реестр ОПО
+        <small>тренажёр-практикум</small>
+    </h1>
+    <div class="subhead">
+        Выберите корректные основания для внесения изменений в соответствии с ситуацией. Поставьте галочки и нажмите «Проверить».
+    </div>
+
+    <div class="situation-card">
+        <div class="situation-header">
+            <span class="badge" id="situation-counter">Ситуация 1 / 6</span>
+            <span style="font-size:0.8rem; background:#eef2ff; padding:2px 12px; border-radius:20px;">📌 выберите все подходящие пункты</span>
+        </div>
+        <div class="situation-text" id="situation-description">
+            <!-- описание подгружается из JS -->
+        </div>
+    </div>
+
+    <div class="checklist">
+        <div class="checklist-title">✍️ Раздел заявления о внесении изменений (регистрационные действия)</div>
+        
+        <!-- блок 2.3.1 и подпункты -->
+        <div class="check-item">
+            <input type="checkbox" id="ch_0">
+            <label for="ch_0"><strong>2.3.1</strong> — изменением характеристик ОПО, связанных с изменением количества и (или) вида опасных веществ (получение, использование, переработка, образование, хранение, транспортирование, уничтожение которых обуславливает наличие признака опасности);</label>
+        </div>
+        <div class="check-item">
+            <input type="checkbox" id="ch_1">
+            <label for="ch_1"><strong>2.3.1</strong> — с изменением состава ОПО или исключения из него предприятий или их цехов, участков, площадок, наружных установок, зданий и сооружений, эксплуатация которых обуславливает признак опасности;</label>
+        </div>
+        <div class="check-item">
+            <input type="checkbox" id="ch_2">
+            <label for="ch_2"><strong>2.3.1</strong> — с изменением состава, количества, типа, марки, модели (при наличии) технических устройств (замена оборудования или реконструкция, исключение, использование новых (дополнительных) технических устройств), эксплуатация которых дает признаки опасности;</label>
+        </div>
+        <div class="check-item">
+            <input type="checkbox" id="ch_3">
+            <label for="ch_3"><strong>2.3.1</strong> — с изменением технологического процесса;</label>
+        </div>
+        <div class="check-item">
+            <input type="checkbox" id="ch_4">
+            <label for="ch_4"><strong>2.3.1</strong> — с изменением признаков или класса опасности ОПО;</label>
+        </div>
+        <div class="check-item">
+            <input type="checkbox" id="ch_5">
+            <label for="ch_5"><strong>2.3.1</strong> — с изменением типового наименования (именного кода объекта) (с указанием полного наименования, рег. номера и вносимых изменений в сведения, характеризующие ОПО);</label>
+        </div>
+
+        <!-- 2.3.2 -->
+        <div class="check-item">
+            <input type="checkbox" id="ch_6">
+            <label for="ch_6"><strong>2.3.2</strong> — изменением адреса места нахождения ОПО (с указанием полного наименования и регистрационного номера ОПО);</label>
+        </div>
+
+        <!-- 2.3.3 -->
+        <div class="check-item">
+            <input type="checkbox" id="ch_7">
+            <label for="ch_7"><strong>2.3.3</strong> — изменением сведений, связанных с исключением ОПО в связи со сменой эксплуатирующей организации;</label>
+        </div>
+
+        <!-- 2.3.4 -->
+        <div class="check-item">
+            <input type="checkbox" id="ch_8">
+            <label for="ch_8"><strong>2.3.4</strong> — изменением сведений о заявителе, собственнике ОПО и (или) сведений, указанных заявителем в заявлении о регистрации ОПО в Реестре.</label>
+        </div>
+    </div>
+
+    <div class="button-group">
+        <div>
+            <button id="resetBtn" class="secondary">⟳ Сбросить отметки</button>
+        </div>
+        <div style="display: flex; gap: 12px;">
+            <button id="checkBtn" class="primary">✅ Проверить ответ</button>
+            <button id="nextBtn" class="secondary" disabled>➡ Следующая ситуация</button>
+        </div>
+    </div>
+    <div id="messageBox" class="message"></div>
+    <div class="footer-note">
+        * В разделе 2.3 заявления необходимо отметить все основания, которые соответствуют произошедшим изменениям на ОПО.
+    </div>
+</div>
+
+<script>
+    // ---------- БАЗА ДАННЫХ СИТУАЦИЙ ----------
+    const situations = [
+        { // Ситуация 1 — Изменение количества опасных веществ + добавление сооружений
+            text: `АО «Сириус» (нефтебаза) имеет вместимость склада нефтепродуктов 31 150 тонн. Организация решила расширить хранение до 44 750 тонн, устанавливает дополнительные резервуары РВС. В результате увеличилось количество опасного вещества (горючая жидкость) и изменился состав ОПО за счёт добавления новых резервуаров (сооружений).`,
+            correct: [0, 1]   // индекс 0 = изменение кол-ва/вида опасных веществ; 1 = изменение состава ОПО (здания/сооружения)
+        },
+        { // Ситуация 2 — Изменение вида опасных веществ + технологический процесс
+            text: `АО «Химия» на гальваническом участке использовало токсичные, окисляющие и опасные для среды вещества. Для улучшения качества покрытий меняет технологический процесс и начинает применять дихромат калия и нитрит натрия (0,7 т) — высокотоксичные вещества. Вид опасных веществ дополнился новой группой (высокотоксичные).`,
+            correct: [0, 3]   // 0 = изменение вида опасных веществ, 3 = изменение технологического процесса
+        },
+        { // Ситуация 3 — Изменение состава ОПО (добавление здания, участка) + новые ТУ (краны)
+            text: `ООО «Монолит» зарегистрирован ОПО «Площадка изготовления металлоконструкций» с ПС. Предприятие построило дополнительное здание закрытого склада металла, установило пять новых мостовых кранов. Вносит изменения: добавился новый участок, здание и технические устройства.`,
+            correct: [1, 2]   // 1 = изменение состава ОПО (здания, участки), 2 = изменение состава/кол-ва технических устройств
+        },
+        { // Ситуация 4 — Исключение ТУ (списание автовышки и автокранов)
+            text: `У АО «ПО "Альфа"» сломались и списаны по экономическим причинам одна автовышка и два автокрана (подъемные сооружения). Технические устройства выведены из эксплуатации. Требуется отразить изменение количества технических устройств в составе ОПО.`,
+            correct: [2]   // только изменение состава/кол-ва технических устройств
+        },
+        { // Ситуация 5 — Замена печей (технологический процесс + изменение состава ТУ)
+            text: `В литейном цехе ООО «Монолит» одна печь ДСП-1,5 выведена из эксплуатации (превысила срок службы). Вместо неё установлены две новые печи ИПП большей производительности (2000 кг каждая). Изменился технологический процесс и состав технических устройств.`,
+            correct: [2, 3]   // 2 = изменение ТУ, 3 = изменение технологического процесса
+        },
+        { // Ситуация 6 — Изменение признака опасности + демонтаж кабин кранов, перевод на дистанционное управление
+            text: `АО «Химия» на ОПО «Площадка цеха гальванических покрытий» эксплуатировало два мостовых крана, управляемых из кабины. Для оптимизации краны переведены на дистанционное управление, кабины демонтированы. Такие краны утратили признак опасности «Подъемные сооружения» (2.3). Исключён один признак опасности, изменён класс, изменён состав ТУ и типовое наименование (объект утратил краны с кабиной).`,
+            correct: [2, 3, 4, 5]   // ТУ + техпроцесс + признаки/класс опасности + типовое наименование
+        }
+    ];
+
+    // Индексы для удобочитаемого отображения правильных ответов
+    const answerLabels = [
+        "📌 изменение количества и/или вида опасных веществ (2.3.1)",
+        "🏭 изменение состава ОПО (здания, сооружения, участки и т.д.) (2.3.1)",
+        "⚙️ изменение состава, количества, типа/марки технических устройств (2.3.1)",
+        "🔄 изменение технологического процесса (2.3.1)",
+        "⚠️ изменение признаков или класса опасности ОПО (2.3.1)",
+        "📛 изменение типового наименования (именного кода) (2.3.1)",
+        "📍 изменение адреса места нахождения ОПО (2.3.2)",
+        "❌ исключение ОПО в связи со сменой эксплуатирующей организации (2.3.3)",
+        "🏢 изменение сведений о заявителе / собственнике ОПО (2.3.4)"
+    ];
+
+    let currentIdx = 0;          // 0-indexed
+    const total = situations.length;
+
+    // DOM элементы
+    const situationDescDiv = document.getElementById('situation-description');
+    const situationCounterSpan = document.getElementById('situation-counter');
+    const checkboxes = [
+        document.getElementById('ch_0'),
+        document.getElementById('ch_1'),
+        document.getElementById('ch_2'),
+        document.getElementById('ch_3'),
+        document.getElementById('ch_4'),
+        document.getElementById('ch_5'),
+        document.getElementById('ch_6'),
+        document.getElementById('ch_7'),
+        document.getElementById('ch_8')
+    ];
+    const checkBtn = document.getElementById('checkBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const messageBox = document.getElementById('messageBox');
+
+    // Вспомогательные функции
+    function clearCheckboxes() {
+        checkboxes.forEach(cb => { if(cb) cb.checked = false; });
+    }
+
+    function disableNextButton(disabled = true) {
+        nextBtn.disabled = disabled;
+    }
+
+    function showMessage(text, isError = false) {
+        messageBox.textContent = text;
+        messageBox.className = 'message';
+        if (isError) {
+            messageBox.classList.add('error');
+        } else {
+            messageBox.classList.add('success');
+        }
+        // если текст пустой - убираем стили
+        if (!text) {
+            messageBox.className = 'message';
+            messageBox.textContent = '';
+        }
+    }
+
+    function getSelectedIndices() {
+        const selected = [];
+        checkboxes.forEach((cb, idx) => {
+            if (cb && cb.checked) selected.push(idx);
+        });
+        return selected.sort((a,b)=>a-b);
+    }
+
+    // сравнение множеств (независимо от порядка)
+    function arraysEqualIgnoreOrder(a, b) {
+        if (a.length !== b.length) return false;
+        const sortedA = [...a].sort((x,y)=>x-y);
+        const sortedB = [...b].sort((x,y)=>x-y);
+        return sortedA.every((val, i) => val === sortedB[i]);
+    }
+
+    function loadSituation(index) {
+        // обновляем текст и счетчик
+        const sit = situations[index];
+        situationDescDiv.textContent = sit.text;
+        situationCounterSpan.textContent = `Ситуация ${index+1} / ${total}`;
+        // сбросить чекбоксы, сообщение и заблокировать кнопку Далее
+        clearCheckboxes();
+        showMessage('');
+        disableNextButton(true);
+        // дополнительно убираем выделение сообщения
+    }
+
+    function checkAnswer() {
+        const selected = getSelectedIndices();
+        const correctAnswers = situations[currentIdx].correct;
+        const isCorrect = arraysEqualIgnoreOrder(selected, correctAnswers);
+        
+        if (isCorrect) {
+            // Верный ответ
+            showMessage(`✅ Верно! Все основания выбраны правильно. Теперь можно перейти к следующей ситуации.`, false);
+            disableNextButton(false);
+        } else {
+            // Неверно: сигнализируем и показываем, какие пункты должны быть отмечены
+            const missing = correctAnswers.filter(idx => !selected.includes(idx));
+            const extra = selected.filter(idx => !correctAnswers.includes(idx));
+            let errorMsg = `❌ Неправильно. `;
+            if (missing.length > 0) {
+                errorMsg += `Не отмечены: ${missing.map(i => answerLabels[i]).join('; ')}. `;
+            }
+            if (extra.length > 0) {
+                errorMsg += `Лишние отметки: ${extra.map(i => answerLabels[i]).join('; ')}. `;
+            }
+            if (missing.length === 0 && extra.length === 0) {
+                errorMsg = `❌ Неправильный набор. Ожидалось: ${correctAnswers.map(i => answerLabels[i]).join('; ')}.`;
+            }
+            showMessage(errorMsg, true);
+            disableNextButton(true);
+        }
+    }
+
+    function nextSituation() {
+        if (currentIdx + 1 < total) {
+            currentIdx++;
+            loadSituation(currentIdx);
+        } else {
+            // последняя ситуация, можно завершить или показать поздравление
+            showMessage(`🎉 Поздравляем! Вы успешно прошли все 6 ситуаций. Отличная тренировка!`, false);
+            disableNextButton(true); // дальше некуда
+            // можно сделать кнопку неактивной, но оставим приятный финал
+            nextBtn.disabled = true;
+            // но можно разрешить перепроверить текущую, оставляем
+        }
+    }
+
+    // Инициализация событий
+    function init() {
+        loadSituation(0);
+        
+        checkBtn.addEventListener('click', () => {
+            checkAnswer();
+        });
+        
+        nextBtn.addEventListener('click', () => {
+            if (!nextBtn.disabled) {
+                nextSituation();
+            }
+        });
+        
+        resetBtn.addEventListener('click', () => {
+            clearCheckboxes();
+            showMessage('🗑 Отметки сброшены. Попробуйте выбрать заново.', false);
+            disableNextButton(true);
+            // дополнительно убираем стиль ошибки, но оставляем нейтральное сообщение
+            setTimeout(() => {
+                if (messageBox.textContent.includes('сброшены')) {
+                    // не удаляем сообщение сразу, дадим прочитать
+                }
+            }, 100);
+        });
+        
+        // При ручном изменении любой галочки сбрасываем блокировку кнопки "Далее" и сообщение,
+        // чтобы ученик мог заново проверить. Но не принудительно удаляем сообщение? Лучше очищать сообщение,
+        // чтобы ученик понимал, что ответ ещё не подтверждён.
+        checkboxes.forEach(cb => {
+            if (cb) {
+                cb.addEventListener('change', () => {
+                    if (nextBtn.disabled === false) {
+                        // если кнопка далеe активна, но пользователь поменял галочки, снова блокируем проверку
+                        disableNextButton(true);
+                        showMessage('✏️ Отметки изменены. Нажмите «Проверить ответ» заново.', false);
+                    } else {
+                        // если уже был неправильный ответ или сброс, просто скрываем сообщение если оно об ошибке
+                        if (messageBox.classList.contains('error')) {
+                            showMessage('📌 Изменили выбор. Нажмите «Проверить», чтобы свериться.', false);
+                        } else if (messageBox.textContent && !messageBox.textContent.includes('Верно')) {
+                            showMessage('📌 Выбор скорректирован. Проверьте себя.', false);
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    init();
+</script>
+</body>
+</html>
