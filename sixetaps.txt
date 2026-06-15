@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Идентификация ОПО: интерактивный гид по этапам</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f0f4f8;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            line-height: 1.5;
+            color: #1e2a3a;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 1.9rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.3px;
+        }
+
+        .subhead {
+            color: #4a627a;
+            margin-bottom: 2rem;
+            border-left: 4px solid #2a7f6e;
+            padding-left: 1rem;
+            font-weight: 400;
+            font-size: 1rem;
+        }
+
+        .accordion {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .accordion-item {
+            background: white;
+            border-radius: 1.2rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05), 0 2px 4px rgba(0, 0, 0, 0.02);
+            transition: all 0.2s ease;
+            overflow: hidden;
+        }
+
+        .accordion-header {
+            background: #ffffff;
+            padding: 1.2rem 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            border-radius: 1.2rem;
+            transition: background 0.2s;
+            user-select: none;
+        }
+
+        .accordion-header:hover {
+            background: #f8fafd;
+        }
+
+        .accordion-title {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: #0f3b5c;
+            letter-spacing: -0.2px;
+        }
+
+        .accordion-icon {
+            font-size: 1.6rem;
+            font-weight: 400;
+            color: #2c7a6e;
+            transition: transform 0.3s ease;
+            line-height: 1;
+        }
+
+        .accordion-item.open .accordion-icon {
+            transform: rotate(180deg);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.33, 1, 0.68, 1);
+            background: #ffffff;
+            border-top: 1px solid #e9edf2;
+        }
+
+        .accordion-item.open .accordion-content {
+            max-height: 2800px;
+        }
+
+        .content-inner {
+            padding: 1.5rem 1.8rem 2rem 1.8rem;
+            color: #1f2f3e;
+        }
+
+        .content-inner p {
+            margin-bottom: 1rem;
+        }
+
+        .content-inner strong, .content-inner b {
+            color: #165a72;
+            font-weight: 600;
+        }
+
+        .content-inner ul, .content-inner ol {
+            margin: 0.75rem 0 1rem 1.5rem;
+        }
+
+        .content-inner li {
+            margin-bottom: 0.4rem;
+        }
+
+        .content-inner blockquote, .tip {
+            background: #eef6f4;
+            border-left: 5px solid #2c7a6e;
+            padding: 0.8rem 1.2rem;
+            margin: 1rem 0;
+            border-radius: 0.8rem;
+            font-size: 0.95rem;
+        }
+
+        .example-box {
+            background: #f9fafb;
+            border: 1px solid #e2e8f0;
+            border-radius: 1rem;
+            padding: 1rem 1.2rem;
+            margin: 1rem 0;
+        }
+
+        .example-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        hr {
+            margin: 1.2rem 0;
+            border: none;
+            height: 1px;
+            background: #e2edf2;
+        }
+
+        .micro-section {
+            margin-top: 1.2rem;
+            margin-bottom: 1.2rem;
+        }
+        .micro-title {
+            font-weight: 700;
+            font-size: 1.08rem;
+            color: #1f6392;
+            border-left: 3px solid #2a7f6e;
+            padding-left: 0.75rem;
+            margin-bottom: 0.75rem;
+            margin-top: 0.5rem;
+        }
+        .micro-section:first-of-type {
+            margin-top: 0;
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 1rem 0.8rem;
+            }
+            .accordion-title {
+                font-size: 1rem;
+            }
+            .accordion-header {
+                padding: 1rem 1.2rem;
+            }
+            .content-inner {
+                padding: 1.2rem 1.2rem 1.8rem;
+            }
+            .content-inner ul, .content-inner ol {
+                margin-left: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📋 Идентификация опасных производственных объектов</h1>
+    <div class="subhead">Пошаговое руководство: от создания комиссии до оформления отчета. Нажмите на любой этап, чтобы развернуть.</div>
+
+    <div class="accordion" id="accordionRoot">
+        <!-- Этап 1 -->
+        <div class="accordion-item" id="step1">
+            <div class="accordion-header">
+                <span class="accordion-title">Этап 1. Создайте комиссию.</span>
+                <span class="accordion-icon">▼</span>
+            </div>
+            <div class="accordion-content">
+                <div class="content-inner">
+                    <p><strong>Для этого руководитель издает приказ о комиссии</strong>, где сам определяет состав комиссии, сроки работы и ответственного за подготовку документов. В комиссию включают минимум 3–5 человек. Так процедура становится официальной, а подразделения начинают взаимодействовать.</p>
+                    <p><strong>Кого надо включить в состав комиссии:</strong></p>
+                    <ul>
+                        <li>Главного инженера и начальника цеха — они отвечают за эксплуатацию.</li>
+                        <li>Специалиста по промбезопасности.</li>
+                        <li>Технолога, механика, энергетика — они знают оборудование и процессы.</li>
+                    </ul>
+                    <div class="tip">
+                        <strong>💡 Совет</strong><br>
+                        Формируйте комиссию на этапе монтажа оборудования. В состав комиссии следует включить специалистов по промбезопасности и работников, которые связаны с техустройствами, зданиями и сооружениями: руководителей структурных подразделений, технологов, механиков и энергетиков.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Этап 2 -->
+        <div class="accordion-item" id="step2">
+            <div class="accordion-header">
+                <span class="accordion-title">Этап 2. Собрать документы и данные.</span>
+                <span class="accordion-icon">▼</span>
+            </div>
+            <div class="accordion-content">
+                <div class="content-inner">
+                    <p>Чтобы выявить все признаки опасности на объекте, проанализируйте документацию на ОПО, осмотрите объект и изучите информацию от работников.</p>
+                    <p><strong>Вот что нужно изучить (п. 9 Правил № 1363):</strong></p>
+                    <ul>
+                        <li>Проектную документацию (строительство, реконструкция, капремонт).</li>
+                        <li>Обоснование безопасности ОПО и декларацию промбезопасности.</li>
+                        <li>Технологические регламенты и описание технологий.</li>
+                        <li>Документы на технические устройства (паспорта, характеристики).</li>
+                        <li>Количество опасных веществ на вашем ОПО и на соседних в радиусе 500 м.</li>
+                    </ul>
+                    <div class="tip">
+                        <strong>💡 Совет</strong><br>
+                        Извлекайте из каждого документа конкретные цифры и факты: из разделов проекта — перечень техустройств, из паспортов — рабочее давление и температуру. Дополнительно опросите персонал — они часто знают о неучтенном оборудовании.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Этап 3 (исправленный) -->
+        <div class="accordion-item" id="step3">
+            <div class="accordion-header">
+                <span class="accordion-title">Этап 3. Определите признаки опасности.</span>
+                <span class="accordion-icon">▼</span>
+            </div>
+            <div class="accordion-content">
+                <div class="content-inner">
+                    <!-- 1. Начните с очевидных признаков -->
+                    <div class="micro-section">
+                        <div class="micro-title">1. Начните с очевидных признаков опасности, которые свойственны конкретному виду деятельности организации.</div>
+                        <div class="example-box">
+                            <strong>📌 Пример. Как определить признаки опасности по отраслям</strong>
+                            <p><strong>Для ТЭЦ</strong> характерно оборудование под давлением (паровые котлы, трубопроводы пара и воды) и опасные вещества (дизельное топливо, мазут)</p>
+                            <p><strong>Для строительных компаний</strong> – подъемные сооружения (автокраны, подъемники, башенные и козловые краны);</p>
+                            <p><strong>Для предприятий химической и нефтехимической промышленности</strong> – обращение опасных веществ и применение оборудования под давлением (химические реакторы и установки).</p>
+                        </div>
+                    </div>
+
+                    <!-- 2. Затем изучите проектную документацию (без буллитов, одним абзацем) -->
+                    <div class="micro-section">
+                        <div class="micro-title">2. Затем изучите проектную документацию</div>
+                        <p>А именно разделы: «Пояснительная записка», «Система газоснабжения», «Отопление и теплоснабжение», «Тепломеханические решения», «Технологические решения».</p>
+                        <p>Из этих разделов надо выписать все техустройства и сооружения с признаками опасности. Получится перечень, который предстоит проверить на корректность и актуальность.</p>
+                    </div>
+
+                    <!-- 3. После первичной работы с проектом отправляйтесь на объект -->
+                    <div class="micro-section">
+                        <div class="micro-title">3. После первичной работы с проектом отправляйтесь на объект, чтобы осмотреться и выявить еще ОПО.</div>
+                        <p>Например, визуально можно опознать семь таких объектов: газопроводы, трубопроводы тепловой сети или опасных веществ, котельные, емкости для хранения, подъемные сооружения, оборудование в производственном цеху.</p>
+                        <p><strong>Осмотр проводите дважды — до и после работы с проектом, вместе со всей комиссией.</strong></p>
+                    </div>
+
+                    <!-- 4. Далее детально проанализируйте (только абзац про паспорта) -->
+                    <div class="micro-section">
+                        <div class="micro-title">4. Далее детально проанализируйте выявленные признаки, проект и документы на оборудование.</div>
+                        <p>Информацию можно получить из паспортов безопасности химической продукции. Сначала выявите виды опасности для каждого вещества. Некоторые вещества могут иметь несколько видов опасности. Затем по количеству каждого вида вещества определите, будет ли ОПО по признаку опасности «Опасные вещества (2.1)». Для этого сравните полученное значение количества каждого вида опасного вещества с показателями количества в таблице 1 и таблице 2 приложения 2 к Закону № 116-ФЗ.</p>
+                    </div>
+
+                    <!-- 5. В конце систематизируйте данные -->
+                    <div class="micro-section">
+                        <div class="micro-title">5. В конце систематизируйте данные:</div>
+                        <ul>
+                            <li>Составьте перечень всех техустройств и сооружений (место, назначение, параметры).</li>
+                            <li>Укажите для каждого вида оборудования выявленные признаки опасности.</li>
+                            <li>Проверьте расчеты и укажите количество веществ при максимальной вместимости оборудования.</li>
+                        </ul>
+                        <p>На основании полученных данных, технологических процессов и характеристик технических устройств выбрать из Приложения 1 к Закону № 116-ФЗ категории, соответствующие Вашим ОПО.</p>
+                        <p><strong>ОПО считается площадка в целом, а не отдельный кран или емкость.</strong></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Этап 4 -->
+        <div class="accordion-item" id="step4">
+            <div class="accordion-header">
+                <span class="accordion-title">Этап 4. Определите класс опасности ОПО.</span>
+                <span class="accordion-icon">▼</span>
+            </div>
+            <div class="accordion-content">
+                <div class="content-inner">
+                    <p>Сначала разбейте объект на отдельные ОПО. Группируйте устройства по технологическому процессу. Не объединяйте цеха без технологической связи. Можно объединять устройства с одним признаком опасности (например, все подъёмные механизмы в один ОПО). Если кран участвует в разливе расплавов — включайте его в ОПО с признаком «Расплавы металлов».</p>
+                    <p><strong>Классы опасности (I — чрезвычайно высокая, II — высокая, III — средняя, IV — низкая) берите из приложения 2 к Закону № 116-ФЗ.</strong> Учитывайте три вещи:</p>
+                    <ul>
+                        <li>По каждому признаку свой класс — итоговый берёте наивысший.</li>
+                        <li>Количество опасных веществ: считайте по максимальной проектной вместимости (даже если оборудование временно не работает). Плюсуйте вещества соседних ОПО в радиусе 500 м.</li>
+                        <li>Технические устройства — только по проекту. Неиспользуемое оборудование исключайте только после официальной консервации или ликвидации.</li>
+                    </ul>
+                    <p>Если объект стоит в особой зоне (ООПТ, континентальный шельф, внутренние морские воды, территориальное море, искусственный участок на воде), класс опасности (II, III или IV) повышают на один уровень.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Этап 5 -->
+        <div class="accordion-item" id="step5">
+            <div class="accordion-header">
+                <span class="accordion-title">Этап 5. Присвойте наименование ОПО.</span>
+                <span class="accordion-icon">▼</span>
+            </div>
+            <div class="accordion-content">
+                <div class="content-inner">
+                    <p>Название выбираете из таблицы типовых наименований (приложение к Правилам № 1363). С 1 марта 2026 года — новая версия, но изменения небольшие: уточнили формулировки, раскрыли аббревиатуры (ТЭЦ, ГРЭС, АЭС).</p>
+                    <p><strong>Как подобрать название (алгоритм):</strong></p>
+                    <ol style="list-style-type: decimal; margin-bottom: 1rem;">
+                        <li>Определите отрасль — найдите нужный раздел в таблице (например, химическое производство — раздел 7, котельная — раздел 11, краны — раздел 15).</li>
+                        <li>Выберите типовое наименование, которое лучше всего описывает ваш объект.</li>
+                        <li>Проверьте два условия:<br>
+                            — признаки опасности совпадают с теми, что указаны в колонке «Особенности идентификации»;<br>
+                            — ваше оборудование подходит под описание.</li>
+                        <li>Сформируйте полное имя: «типовое наименование + название организации + цех/участок». Добавьте цифровой код раздела.</li>
+                    </ol>
+                    <div class="tip">
+                        <strong>⚠️ Частые ошибки:</strong> путаете отрасль, включаете в ОПО неподходящее оборудование, признаки опасности не полностью соответствуют названию.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Этап 6 (без изменений) -->
+        <div class="accordion-item" id="step6">
+            <div class="accordion-header">
+                <span class="accordion-title">Этап 6. Оформите документы по результатам идентификации ОПО</span>
+                <span class="accordion-icon">▼</span>
+            </div>
+            <div class="accordion-content">
+                <div class="content-inner">
+                    <div class="micro-section">
+                        <div class="micro-title">▶ Форма сведений, характеризующих ОПО</div>
+                        <p>Форма сведений, характеризующих ОПО, для первичной и повторной идентификации одна и та же. Вот из каких разделов она состоит:</p>
+                        <ul>
+                            <li>ОПО</li>
+                            <li>Признаки опасности ОПО и их числовые обозначения</li>
+                            <li>Класс опасности ОПО и его числовое обозначение</li>
+                            <li>Классификация ОПО</li>
+                            <li>Виды деятельности, на осуществление которых требуется получение лицензии для эксплуатации ОПО</li>
+                            <li>Сведения о составе ОПО</li>
+                            <li>Количество опасных веществ на ОПО (в тоннах), находящихся на расстоянии менее 500 метров на других ОПО заявителя или иной организации по видам в соответствии с таблицами 1 и 2 приложения 2 к</li>
+                            <li>Заявитель</li>
+                            <li>Реквизиты ОПО и территориального органа Ростехнадзора</li>
+                        </ul>
+                    </div>
+
+                    <div class="micro-section">
+                        <div class="micro-title">▶ Итоговый отчет</div>
+                        <p><strong>Итоговый отчет нужен, чтобы:</strong></p>
+                        <ul>
+                            <li>Подтвердить, что идентификация проведена правильно.</li>
+                            <li>Зарегистрировать ОПО в госреестре.</li>
+                            <li>Предъявить при проверке Ростехнадзора.</li>
+                        </ul>
+                        <p>В отчете перечислите все изученные документы, площадки и участки с обоснованием, почему их включили в ОПО, а также присвоенные классы и наименования. Приложите к отчету все материалы, которыми пользовались.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        const items = document.querySelectorAll('.accordion-item');
+        function toggleItem(item) {
+            item.classList.toggle('open');
+        }
+        items.forEach(item => {
+            const header = item.querySelector('.accordion-header');
+            if (!header) return;
+            header.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleItem(item);
+            });
+        });
+    })();
+</script>
+</body>
+</html>
