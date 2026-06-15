@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Документы к заявлению об изменении сведений об ОПО</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #eef2f7;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            padding: 2rem 1rem;
+            color: #1a2c3e;
+        }
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+        .header {
+            background: white;
+            border-radius: 28px;
+            padding: 1rem 1.8rem;
+            margin-bottom: 2rem;
+            border: 1px solid #dce8f0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+        .header h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #135b7a;
+            margin-bottom: 0.3rem;
+        }
+        .header p {
+            font-size: 0.85rem;
+            color: #2c5775;
+        }
+        .accordion {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .accordion-item {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.05);
+            border: 1px solid #e2edf2;
+            overflow: hidden;
+        }
+        .accordion-header {
+            background: white;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: 600;
+            font-size: 1rem;
+            color: #135b7a;
+        }
+        .accordion-header:hover {
+            background: #f9fbfd;
+        }
+        .accordion-item.active .accordion-header {
+            background: #f4f9fe;
+            border-bottom: 1px solid #dee9f0;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .doc-icon {
+            font-size: 1.5rem;
+        }
+        .accordion-icon {
+            font-size: 1.2rem;
+            transition: transform 0.25s;
+            color: #5685a2;
+        }
+        .accordion-item.active .accordion-icon {
+            transform: rotate(180deg);
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+        .accordion-item.active .accordion-content {
+            max-height: 1600px;
+        }
+        .content-inner {
+            padding: 1.2rem 1.8rem;
+            background: #ffffff;
+            border-top: 1px solid #e9f0f5;
+            line-height: 1.5;
+        }
+        .sub-title {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #0f4e6b;
+            margin: 0.8rem 0 0.4rem 0;
+            border-left: 3px solid #ffb347;
+            padding-left: 12px;
+        }
+        .sub-title:first-of-type {
+            margin-top: 0;
+        }
+        .list-check {
+            list-style: none;
+            margin: 0.3rem 0 0.5rem 0;
+        }
+        .list-check li {
+            margin-bottom: 0.45rem;
+            padding-left: 1.5rem;
+            position: relative;
+            font-size: 0.92rem;
+        }
+        .list-check li::before {
+            content: "▹";
+            color: #2c7da0;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+        .nested-list {
+            margin-left: 1.5rem;
+            list-style: none;
+            border-left: 1px dashed #cbdbe0;
+            padding-left: 1rem;
+            margin-top: 0.2rem;
+        }
+        .nested-list li::before {
+            content: "•";
+            color: #f28b2e;
+        }
+        .alt-box {
+            background: #f9f6ef;
+            border-radius: 18px;
+            padding: 0.8rem 1.2rem;
+            margin: 0.7rem 0;
+            border-left: 4px solid #ffaa33;
+        }
+        .small-note {
+            font-size: 0.85rem;
+            background: #f0f4f9;
+            padding: 0.5rem 1rem;
+            border-radius: 14px;
+            margin-top: 0.7rem;
+        }
+        .bold {
+            font-weight: 600;
+            color: #135b7a;
+        }
+        @media (max-width: 640px) {
+            .content-inner { padding: 1rem 1.2rem; }
+            .accordion-header { padding: 0.9rem 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h2>📋 Документы к заявлению <br>об изменении сведений об ОПО</h2>
+        <p>Список на основе п. 13, 14, 16 и 28 Правил регистрации ОПО в госреестре № 1363</p>
+    </div>
+
+    <div class="accordion">
+        <!-- 1. Сведения, характеризующие ОПО -->
+        <div class="accordion-item">
+            <div class="accordion-header">
+                <div class="header-left">
+                    <span class="doc-icon">📋</span>
+                    <span>1. Сведения, характеризующие ОПО</span>
+                </div>
+                <span class="accordion-icon">▼</span>
+            </div>
+            <div class="accordion-content">
+                <div class="content-inner">
+                    <div class="sub-title">Общие сведения об ОПО</div>
+                    <ul class="list-check">
+                        <li><span class="bold">полное наименование и адрес</span> ОПО</li>
+                        <li><span class="bold">типовое наименование (именной код)</span></li>
+                        <li><span class="bold">процессы (работы)</span> по Приложению 1 к 116-ФЗ</li>
+                        <li><span class="bold">классификация</span> по Приложению 2 к 116-ФЗ</li>
+                        <li><span class="bold">предлагаемый класс опасности</span></li>
+                        <li><span class="bold">виды деятельности, подлежащие лицензированию</span></li>
+                    </ul>
+
+                    <div class="sub-title">Сведения об эксплуатирующей организации</div>
+                    <ul class="list-check">
+                        <li><span class="bold">для юридического лица:</span> полное и (при наличии) сокращённое наименования, ИНН, ОГРН, адрес, должность, фамилия, имя, отчество руководителя</li>
+                        <li><span class="bold">для индивидуального предпринимателя:</span> фамилия, имя, отчество, ИНН, ОГРНИП, адрес регистрации по месту жительства</li>
+                    </ul>
+
+                    <div class="sub-title">Здания, сооружения, площадки</div>
+                    <ul class="list-check">
+                        <li>наименования предприятия, цеха, участка, площадки, зданий и сооружений на ОПО</li>
+                        <li>проектные (эксплуатационные) характеристики зданий и сооружений, <span class="bold">дата их ввода в эксплуатацию</span> (при наличии)</li>
+                    </ul>
+
+                    <div class="sub-title">Опасные вещества</div>
+                    <ul class="list-check">
+                        <li>наименование, вид опасного вещества (таблицы 1 и 2 Приложения 2 к 116-ФЗ)</li>
+                        <li>сведения о количестве:
+                            <ul class="nested-list">
+                                <li>количество опасных веществ, одновременно находящихся или могущих находиться на данном ОПО, а также на других ОПО в радиусе менее 500 м (независимо от принадлежности) — при наличии таких сведений</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <div class="sub-title">Технические устройства</div>
+                    <ul class="list-check">
+                        <li>самоходные подъёмные сооружения, оборудование под давлением в передвижных и транспортабельных установках:
+                            <ul class="nested-list">
+                                <li>наименование, тип, марка, модель, регистрационные/учётные номера</li>
+                                <li>проектные (эксплуатационные) характеристики, заводские и инвентарные номера</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <div class="sub-title">Дата подписания документа</div>
+                    <ul class="list-check">
+                        <li><span class="bold">дата подписания сведений</span></li>
+                    </ul>
+
+                    <div class="small-note">
+                        <strong>✏️ При внесении изменений дополнительно указываются:</strong><br>
+                        — регистрационный номер ОПО;<br>
+                        — территориальный орган Ростехнадзора, зарегистрировавший ОПО.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Документы на имущество -->
+        <div class="accordion-item">
+            <div class="accordion-header">
+                <div class="header-left">
+                    <span class="doc-icon">🏗️</span>
+                    <span>2. Документы на имущество</span>
+                </div>
+                <span class="accordion-icon">▼</span>
+            </div>
+            <div class="accordion-content">
+                <div class="content-inner">
+                    <div class="sub-title">Земельные участки, здания, сооружения</div>
+                    <ul class="list-check">
+                        <li><span class="bold">Если права не зарегистрированы в ЕГРН</span> — копии документов, подтверждающих право собственности или иное законное основание (договор аренды, купли-продажи и т.п.).</li>
+                        <li><span class="bold">Если права зарегистрированы в ЕГРН</span> — реквизиты правоустанавливающих документов (номер, дата, орган регистрации).</li>
+                        <li><span class="bold">До государственной регистрации права на здание/сооружение</span>:
+                            <ul class="nested-list">
+                                <li>копия <span class="bold">технического плана</span> здания, сооружения;</li>
+                                <li><span class="bold">и (или)</span> копия <span class="bold">правоустанавливающего документа на земельный участок</span>, на котором размещены такие здание, сооружение;</li>
+                                <li>либо копия <span class="bold">разрешения на использование земель и земельного участка</span>, находящихся в государственной или муниципальной собственности (если участок не требуется предоставлять).</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <div class="sub-title">Технические устройства</div>
+                    <ul class="list-check">
+                        <li>Копии документов, подтверждающих право владения (собственность, лизинг, аренда) для:
+                            <ul class="nested-list">
+                                <li>оборудования, работающего под давлением >0,07 МПа (пар, газ, вода >115°C, иные жидкости при температуре кипения);</li>
+                                <li>стационарных грузоподъёмных механизмов (кроме лифтов и подъёмных платформ для инвалидов), канатных дорог, фуникулёров, эскалаторов в метро.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Технологическая документация -->
+        <div class="accordion-item">
+            <div class="accordion-header">
+                <div class="header-left">
+                    <span class="doc-icon">📐</span>
+                    <span>3. Технологическая документация</span>
+                </div>
+                <span class="accordion-icon">▼</span>
+            </div>
+            <div class="accordion-content">
+                <div class="content-inner">
+                    <div class="sub-title">Основной вариант</div>
+                    <ul class="list-check">
+                        <li>копия текстовой части раздела «Технологические решения» проектной документации здания и (или) сооружения на ОПО с указанием реквизитов заключения экспертизы проектной документации.</li>
+                    </ul>
+                    <div class="alt-box" style="margin-top: 0.5rem;">
+                        <strong>Если документация на техническое перевооружение ОПО не входит в состав проектной документации, то:</strong><br>
+                        копия документации на техническое перевооружение ОПО с указанием реквизитов заключения ЭПБ.
+                    </div>
+                    <div class="alt-box">
+                        <strong>Если нет раздела «Технологические решения» или проектной документации, а также документации на техперевооружение, то:</strong><br>
+                        копия технологического регламента (разработанного в соответствии с ФНиП) либо иного документа, содержащего:
+                        <ul class="list-check" style="margin-top: 6px;">
+                            <li>характеристику технологической схемы производства и отдельных параметров процесса</li>
+                            <li>источники поступления сырья и материалов</li>
+                            <li>показатели и характеристики технологических процессов и оборудования</li>
+                            <li>количество и типы вспомогательного оборудования (в т.ч. грузоподъёмного)</li>
+                            <li>сведения о расчётной численности, квалификации работников, рабочих местах</li>
+                            <li>проектные решения по соблюдению технологических регламентов</li>
+                            <li>принципиальные схемы, технологические планировки, схему грузопотоков (при наличии)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Обоснование безопасности ОПО -->
+        <div class="accordion-item">
+            <div class="accordion-header">
+                <div class="header-left">
+                    <span class="doc-icon">⚖️</span>
+                    <span>4. Обоснование безопасности ОПО</span>
+                </div>
+                <span class="accordion-icon">▼</span>
+            </div>
+            <div class="accordion-content">
+                <div class="content-inner">
+                    <ul class="list-check">
+                        <li>обоснование безопасности ОПО</li>
+                        <li>документы, которые содержат обоснование безопасности ОПО, с указанием реквизитов положительного заключения ЭПБ такого обоснования</li>
+                    </ul>
+                    <div class="small-note">
+                        <strong>Когда применяется второй вариант (с реквизитами ЭПБ):</strong><br>
+                        Если при проектировании, строительстве, эксплуатации, реконструкции, капитальном ремонте, техническом перевооружении, консервации или ликвидации ОПО требуется отступление от требований промышленной безопасности, установленных федеральными нормами и правилами, либо таких требований недостаточно, либо они не установлены.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('.accordion-header').forEach(header => {
+        header.addEventListener('click', function() {
+            this.closest('.accordion-item').classList.toggle('active');
+        });
+    });
+    document.querySelector('.accordion-item').classList.add('active');
+</script>
+</body>
+</html>
